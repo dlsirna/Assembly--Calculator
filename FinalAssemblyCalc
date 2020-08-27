@@ -1,0 +1,185 @@
+	ORG 100
+
+/This is an Assembley program implementing calculator functions (add, subtract, 
+/divide(numerator=divisor  / numerator>divisor  / numerator < divisor), multiply
+
+/to choose operation enter 10-13 add subtract multiply divide respectively
+
+/for division the first number entered will be your numerator the second number will be the divisor
+/For Division out put the first number out will be the quotient and the second the remainder
+
+/enter the number values between 0-9 		
+
+RunCalculator, Load One
+	
+	INPUT
+	Store Operation
+	OUTPUT
+	INPUT 
+	Store Number1
+	OUTPUT
+	INPUT 
+	Store Number2
+	OUTPUT
+                               
+	
+
+	If,     Load	 Operation
+	Subt	OperationUpperBound
+	Skipcond 800			        /if operation is >13 send error code (-9999)
+	Jump	 Else
+	Load	 Operation
+	Subt	OperationLowerBound
+	Skipcond 000				/if operation is < 10 send error code (-9999)
+	Jump	 Else
+        Load	 Number1
+	Subt	NumberUpperBound		
+	Skipcond 800				/If Number 1 is > 9 send error code (-9999)
+	Jump	 Else
+	Load	 Number1
+	Subt	NumberLowerBound
+	Skipcond	000			 /If Number 1 is < 1 send error code (-9999)
+	Jump	 Else
+        Load	 Number2
+	Subt	NumberUpperBound
+	Skipcond 800				/If Number 2 is > 9 send error code (-9999)
+	Jump	 Else
+	Load	 Number2
+	Subt	NumberLowerBound
+	Skipcond 000				/If Number 2 is < 1 send error code (-9999)
+	Jump	 Else	
+	Jump TryNext1
+	
+
+	TryNext1,   Load Operation
+	Subt	ValidAdd
+	Skipcond 400				/If value - ValidAdd = 0 enter subroutine "Calculate addition", if not then continue operation matching
+	Jump	 TryNext2 
+	Jump CalculateAddition
+
+
+	TryNext2,   Load Operation
+	Subt	ValidSubtract
+	Skipcond 400				/If value - ValidSubtact = 0 enter subroutine "Calculate Subtraction", if not contine operation matching
+	Jump 	TryNext3
+	Jump CalculateSubtraction
+	
+
+
+	TryNext3,   Load Operation
+	Subt	ValidMultiply
+	Skipcond 400				/If value - ValidMultiply = 0 enter subroutine "Calculate Muliplication", if not contine operation matching
+	Jump	 TryNext4 
+	Jump CalculateMultiplication
+
+
+	TryNext4,   Load Operation
+		Subt	ValidDivide
+		Skipcond 400				/If value - ValidDivide = 0 enter subroutine "Calculate Subtraction", if not then send error code (-9999)
+		Jump Else 
+	Jump CalculateDivision		
+
+
+
+
+	CalculateAddition, Load Number1		/Adds
+		Add	 Number2
+		OUTPUT
+	Jump RunCalculator
+
+
+
+
+	CalculateSubtraction, Load Number1	     /Subtracts		
+		Subt	 Number2
+		OUTPUT
+	Jump RunCalculator
+
+
+
+
+	CalculateMultiplication, Load Count	  /I equal the count to the second number minus one, which controls how many times the loop adds the first number to itself, until the counter goes negative, then sends output
+		Add	 Number1
+		Store	 Count
+		Subt	 One
+		Store	 Count
+	loop,	 Load 	Hold
+		Add	 Number2
+		Store	 Hold
+		Load 	Count
+		Subt	 One
+		Store	 Count	
+	Skipcond	 000
+	jump	 loop
+		Load	 Hold
+		OUTPUT
+		Subt	 Hold
+		Store	 Hold
+		Load	 Count
+		Subt	 Count
+		Store	 Count	
+	Jump	 RunCalculator
+
+
+
+
+	CalculateDivision, Load Number1		  	/create a remainder value which we equate to number one, and we will subtract the second number for every iteration of the loop until the value goes
+							 	/negative at which point the loop has ran one too many times so we will take 										
+							 	/one off the count and we will readd the divisor to get our remainter
+		Load	 Remainder
+		Add	 Number1
+		Store	 Remainder
+		Load	 Number2		
+	loop1, 	Load	 Remainder
+		Subt 	Number2
+		Store 	Remainder
+		Load	 Count
+		Add 	One
+		Store 	Count
+		Load 	Remainder
+	skipcond 000
+	jump	 loop1
+		Load 	Remainder
+		Add 	Number2
+		Store 	Remainder
+		Load 	Count
+		Subt 	One
+		Store 	Count
+		Load	 Count
+		OUTPUT
+		Subt 	Count
+		Store 	Count
+		Load	Remainder
+		OUTPUT
+		Subt 	Remainder
+		Store 	Remainder	
+	Jump RunCalculator
+	
+
+
+	Else,   Load	InvalidInput			/This is my Ivalid Input function
+	OUTPUT   	 InvalidInput				
+  	Jump	 RunCalculator	
+
+
+Operation, Dec 0
+Number1, Dec 0
+Number2, Dec 0
+OperationUpperBound, Dec 9
+OperationLowerBound, Dec 14
+NumberUpperBound,	Dec  0
+NumberLowerBound,	Dec  10
+InvalidInput,	    Dec  -9999
+ValidAdd,		Dec  10
+ValidSubtract,	   Dec  11
+ValidMultiply,	    Dec  12
+ValidDivide,	      Dec  13
+Count,		Dec 0
+Hold,		 Dec 0
+Remainder,	    Dec 0
+One,		  Dec 1
+
+
+		
+		
+	 
