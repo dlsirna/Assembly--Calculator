@@ -2,9 +2,15 @@
  A basic calculator implemented in Assembly Ran in MARIE
  
  This is an Assembley program implementing calculator functions (add, subtract, 
-divide(numerator=divisor  / numerator>divisor  / numerator < divisor), multiply
+divide(case 1: numerator==divisor case 2 numerator>divisor  case 3: numerator < divisor), multiply
 
 to choose operation enter 10-13 add subtract multiply divide respectively
+
+10 = add
+11 = subtract
+12 = divide
+13 = multiply
+
 enter the number values between 0-9 		
 
 For Division:
